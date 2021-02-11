@@ -79,8 +79,8 @@ def func5(t, x):
     return np.ceil(t - x) - (t - x)
 
 
-test_euler1 = [[0, 1, 0.01, 100, func1], MyEuler(0, 1, 1, 100, func1)]
-test_euler2 = [[0.1, 0, 0.1, 10, func2], MyEuler(0.1, 0, 1, 10, func2)]
+test_euler1 = [[0, 1, 0.01, 100, func1], MyEuler(0, 1, 0.01, 100, func1)]
+test_euler2 = [[0.1, 0, 0.1, 10, func2], MyEuler(0.1, 0, 0.1, 10, func2)]
 test_euler3 = [[1, 3, 0.001, 42, func3], MyEuler(1, 3, 0.001, 42, func3)]
 test_euler4 = [[0, 0, 0.0001, 2000, func4], MyEuler(0, 0, 0.0001, 2000, func4)]
 test_euler5 = [[1, 0, 1, 9310023, func5], MyEuler(1, 0, 1, 9310023, func5)]
