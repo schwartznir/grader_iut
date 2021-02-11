@@ -1,7 +1,7 @@
 """The goal of the module is to grade the python submissions downloaded from e-campus Paris Saclay"""
 
 import os
-import statistics as stats
+import signal
 import pandas as pd
 import shutil
 import numpy as np
@@ -10,14 +10,12 @@ import zipfile
 import sys
 from pylint.lint import Run
 
-from tests import TESTS_GAUSS_FORM as TESTS
+from tests import TESTS_INV as TESTS
 
 csv_name = 'grades_names.csv'
-tmp_csv = 'tmp.csv'
-pep_csv = 'students_pep_notes.csv'
 TP_NAME = 'TP22'
 curr_zip = TP_NAME+'.zip'
-functionname = 'Pivot_De_Gauss'
+functionname = 'invmat'
 
 
 def parse_contents(currzip=curr_zip):
@@ -86,8 +84,11 @@ def num_eval(submissions, grades):
         grade = 0
 
         for params in TESTS:
-            if test(params[0], params[1]) == 1:
-                grade += pts_per_test
+            try:
+                if test(params[0], params[1]) == 1:
+                    grade += pts_per_test
+            except:
+                continue
 
         updated_grades.at[idx, 'practical tests grade/15'] = grade
         updated_grades.at[idx, 'final grade'] = updated_grades.at[idx, 'practical tests grade/15'] + \
@@ -98,12 +99,26 @@ def num_eval(submissions, grades):
     return updated_grades
 
 
-def test(inp, right_output):
+def handler(signum, frame):
+    print("It takes top much time to execute the code. Quitting")
+    raise TimeoutError
 
+
+class TimeOutError(RuntimeError):
+    pass
+
+
+def test(inp, right_output):
+    # Test if a student's function gives a correct output
     try:
-        import submission
-        student_func = getattr(submission, functionname)
-        stud_output = student_func(inp[0], inp[1])
+        try:
+            signal.signal(signal.SIGALRM, handler)
+            signal.alarm(25)
+            import submission
+            student_func = getattr(submission, functionname)
+            stud_output = student_func(inp)
+        except:
+            return 0
         np.testing.assert_equal(stud_output, right_output)
         return 1
     except:
@@ -124,7 +139,8 @@ def pylint_eval(submissions, grades):
         else:
             grades_pep.append(0.0)
 
-    #grades_with_shift = [np.floor(5.0, float(grade + np.abs(stats.mean(grades_wo_shift)))) for grade in grades_wo_shift]
+    # grades_with_shift = [np.floor(5.0, float(grade + np.abs(stats.mean(grades_wo_shift))))
+    # for grade in grades_wo_shift]
     grades['pep grade/5'] = grades_pep
     return grades
 
