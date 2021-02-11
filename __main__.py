@@ -100,7 +100,7 @@ def num_eval(submissions, grades):
 
 
 def handler(signum, frame):
-    print("It takes top much time to execute the code. Quitting")
+    print("It takes too much time to execute the code. Quitting")
     raise TimeoutError
 
 
@@ -119,6 +119,7 @@ def test(inp, right_output):
             stud_output = student_func(inp)
         except:
             return 0
+
         np.testing.assert_equal(stud_output, right_output)
         return 1
     except:
