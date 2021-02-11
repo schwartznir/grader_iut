@@ -16,6 +16,8 @@ csv_name = 'grades_names.csv'
 TP_NAME = 'TP22'
 curr_zip = TP_NAME+'.zip'
 functionname = 'invmat'
+IS_EXACT = 1  # 1 is the students' result should be exactly like the test code. 0 otherwise.
+PROXIMITY = 0.01  # If not exact, demand proximity of PROXIMITY between student's solution and the test solution
 
 
 def parse_contents(currzip=curr_zip):
@@ -119,9 +121,11 @@ def test(inp, right_output):
             stud_output = student_func(inp)
         except:
             return 0
-
-        np.testing.assert_equal(stud_output, right_output)
-        return 1
+        if IS_EXACT:
+            np.testing.assert_equal(stud_output, right_output)
+            return 1
+        else:
+            return int(np.abs(stud_output - right_output) < PROXIMITY)
     except:
         return 0
 
