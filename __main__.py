@@ -10,12 +10,12 @@ import zipfile
 import sys
 from pylint.lint import Run
 
-from tests import TESTS_INV as TESTS
+from tests import TESTS_EULER as TESTS
 
 csv_name = 'grades_names.csv'
-TP_NAME = 'TP22'
+TP_NAME = 'Tp3'
 curr_zip = TP_NAME+'.zip'
-functionname = 'invmat'
+functionname = 'MyEuler'
 IS_EXACT = 1  # 1 is the students' result should be exactly like the test code. 0 otherwise.
 PROXIMITY = 0.01  # If not exact, demand proximity of PROXIMITY between student's solution and the test solution
 
@@ -115,10 +115,10 @@ def test(inp, right_output):
     try:
         try:
             signal.signal(signal.SIGALRM, handler)
-            signal.alarm(25)
+            signal.alarm(300)
             import submission
             student_func = getattr(submission, functionname)
-            stud_output = student_func(inp)
+            stud_output = student_func(inp[0], inp[1], inp[2], inp[3], inp[4])
         except:
             return 0
         if IS_EXACT:

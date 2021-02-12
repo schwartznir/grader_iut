@@ -137,5 +137,5 @@ def methtir(eps):
 
 random_epsilons = np.random.rand(1, 15)
 random_ints = np.random.randint(-20212021, 20212021, 15)
-TESTS_PROGTIR = [[b, progtir(b)] for b in random_ints[0]]
-TESTS_METHTIR = [[eps, methtir(eps)] for eps in random_epsilons[0]]
+TESTS_PROGTIR = [[float(b), float(progtir(b))] for b in random_ints]
+TESTS_METHTIR = [[float(eps), float(methtir(eps))] for eps in random_epsilons[0]]
